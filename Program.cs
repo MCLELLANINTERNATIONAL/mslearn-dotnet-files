@@ -83,7 +83,10 @@ IEnumerable<string> FindFiles(string folderName)
     {
         // The file name will contain the full path,
         var extension = Path.GetExtension(file);
-        if (extension == ".json")
+        if (extension == ".json" && 
+            Path.GetFileName(file) == "sales.json" &&
+            file.Contains($"{Path.DirectorySeparatorChar}20")
+        )
         {
             salesFiles.Add(file);
         }
@@ -103,7 +106,7 @@ double CalculateSalesTotal(IEnumerable<string> salesFiles)
     
     // Loop over each file path in salesFiles
     foreach (var file in salesFiles)
-    {      
+    {
         // Read the contents of the file
         string salesJson = File.ReadAllText(file);
     
@@ -139,7 +142,7 @@ void GenerateSalesSummaryReport(
             grandTotal += data.Total;
 
             fileTotals.Add(
-                (Path.GetFileName(file), data.Total));
+                (Path.GetRelativePath(currentDirectory, file), data.Total));
         }
     }
 
